@@ -27,11 +27,17 @@ do
     fi
   done
 
-  git commit -m "WIP Adding items from $start to $end"
-  echo "Committing after adding items from $start to $end. There are $total_items items in total."
-  echo "Batch number $((i+1)) is being processed."
-  git push origin
-  echo "Pushed items from $start to $end. There are $total_items items in total."
-  echo "Batch number $((i+1)) has been processed."
-  sleep 120
+  # Check if there are changes staged for commit
+  if git diff --staged --quiet; then
+    echo "No changes to commit. Stopping script."
+    exit 0
+  else
+    git commit -m "WIP Adding items from $start to $end"
+    echo "Committing after adding items from $start to $end. There are $total_items items in total."
+    echo "Batch number $((i+1)) is being processed."
+    git push origin
+    echo "Pushed items from $start to $end. There are $total_items items in total."
+    echo "Batch number $((i+1)) has been processed."
+    sleep 120
+  fi
 done
